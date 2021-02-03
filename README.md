@@ -52,3 +52,8 @@ swatch-rs -i ./docs/iceland.jpg -d file -c 8 -o quantize-image.jpg
 ```
 
 ![swatch.html](./docs/swatch.png)
+
+
+**Image: quantize-image.jpg - dimention: 1920 × 1080 - size: 418 Kib**
+
+![quantize-image](./docs/quantize-image.jpg)
