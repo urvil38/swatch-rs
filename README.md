@@ -17,7 +17,7 @@ FLAGS:
 OPTIONS:
     -d, --debug-type <debug-type>    Debug type print quantized pixels to given format. value can be (html, json or
                                      file). "file" debug type will create a "swatch.html" and write HTML data into it
-    -i, --image <image-path>         Absolute path to an image
+    -i, --image <image-path>         Path to an image
     -c, --colors <max-depth>         Number of colors needed in power of 2, ex: for 16 colors pass 4. (i.e. 2^4 = 16)
                                      [default: 4]
     -o, --output-image <output>      [default: quantize-image.png]
@@ -48,7 +48,7 @@ binary will end up in `./target/release/swatch-rs`.
 - following command will produce quantized image and also swatch.html file which contains top N dominant colors(sorted by luminance).
 
 ```bash
-swatch-rs -i ./docs/iceland.jpg -d file -o quantized-iamge.jpg
+swatch-rs -i ./docs/iceland.jpg -d file -c 8 -o quantize-image.jpg
 ```
 
 ![swatch.html](./docs/swatch.png)
