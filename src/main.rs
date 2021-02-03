@@ -31,7 +31,7 @@ fn parse_output_type(s: &str) -> Result<DebugType, String> {
     about = "utility to quantize image to N dominant color using median cut algorithm."
 )]
 struct Opt {
-    /// Absolute path to an image
+    /// Path to an image
     #[structopt(short = "i", long = "image")]
     image_path: String,
 
