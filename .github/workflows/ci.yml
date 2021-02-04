@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      test:
+        description: 'Testing the build workflow'
+        required: true
+        default: 'true'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.45.0
+          override: true
+
+      # Ensure all code has been formatted with rustfmt
+      - run: rustup component add rustfmt
+      - name: Check formatting
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check --color always
+
+      - run: rustup component add clippy
+      - name: Clippy check
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Build target ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        name: [linux, armv7, arm64, windows, macos]
+        include:
+          - name: linux
+            os: ubuntu-latest
+
+          - name: armv7
+            os: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+            build_deps: >
+              gcc-arm-linux-gnueabihf
+            cargo_config: |
+              [target.armv7-unknown-linux-gnueabihf]
+              linker = "arm-linux-gnueabihf-gcc"
+            build_flags: --target armv7-unknown-linux-gnueabihf
+
+          - name: arm64
+            os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            build_deps: >
+              gcc-aarch64-linux-gnu
+            cargo_config: |
+              [target.aarch64-unknown-linux-gnu]
+              linker = "aarch64-linux-gnu-gcc"
+            build_flags: --target aarch64-unknown-linux-gnu
+
+          - name: windows
+            os: windows-latest
+
+          - name: macos
+            os: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.45.0
+          override: true
+      - name: Add target
+        run: rustup target add ${{ matrix.target }}
+        if: matrix.target != ''
+      - name: Set up .cargo/config
+        run: |
+          mkdir .cargo
+          echo '${{ matrix.cargo_config }}' > .cargo/config
+        if: matrix.cargo_config != ''
+      - name: Build for target
+        run: cargo build --verbose --no-default-features ${{ matrix.build_flags }}
