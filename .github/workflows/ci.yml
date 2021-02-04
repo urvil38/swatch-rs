@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    paths:
+    - '**.rs'
   pull_request:
   workflow_dispatch:
     inputs:
@@ -92,6 +94,6 @@ jobs:
           mkdir .cargo
           echo '${{ matrix.cargo_config }}' > .cargo/config
         if: matrix.cargo_config != ''
-        
+
       - name: Build for target
         run: cargo build --verbose --no-default-features ${{ matrix.build_flags }}
