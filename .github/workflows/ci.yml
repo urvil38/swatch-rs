@@ -78,13 +78,20 @@ jobs:
         with:
           toolchain: 1.45.0
           override: true
+      
       - name: Add target
         run: rustup target add ${{ matrix.target }}
         if: matrix.target != ''
+
+      - name: Install linux build dependencies
+        run: sudo apt install ${{ matrix.build_deps }}
+        if: matrix.build_deps != ''
+
       - name: Set up .cargo/config
         run: |
           mkdir .cargo
           echo '${{ matrix.cargo_config }}' > .cargo/config
         if: matrix.cargo_config != ''
+        
       - name: Build for target
         run: cargo build --verbose --no-default-features ${{ matrix.build_flags }}
