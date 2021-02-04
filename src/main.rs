@@ -88,7 +88,7 @@ fn main() -> Result<(), io::Error> {
 
     match opt.debug_type {
         None => (),
-        Some(d) => write_to(d, &pixels, filename.to_string())
+        Some(d) => write_to(d, &pixels, filename.to_string()),
     }
 
     Ok(())
