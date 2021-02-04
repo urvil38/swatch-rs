@@ -1,5 +1,7 @@
 # swatch-rs
 
+![CI](https://github.com/urvil38/swatch-rs/workflows/CI/badge.svg)
+
 Quantize RGB color range of image to N dominant colors using [median cut](https://en.wikipedia.org/wiki/Median_cut) algorithm.
 
 ```
