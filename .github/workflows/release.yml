@@ -104,6 +104,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ matrix.archive_name }}
           asset_name: swatch-rs-$tag-${{ matrix.asset_suffix }}
-          tag: v0.0.1
+          tag: ${{ github.ref }}
           prerelease: true
         if: github.event.inputs.test != 'true'
