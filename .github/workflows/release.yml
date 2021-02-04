@@ -80,7 +80,6 @@ jobs:
 
       - name: cargo build
         run: cargo build --release --locked ${{ matrix.build_flags }}
-        working-directory: ./swatch-rs
 
       - name: Create archive
         run: |
