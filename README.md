@@ -25,6 +25,22 @@ OPTIONS:
     -o, --output-image <output>      [default: quantize-image.png]
 ```
 
+# Download
+
+- Download appropriate pre-compiled binary from the [release](https://github.com/urvil38/swatch-rs/releases) page.
+
+```bash
+# download tar archive using cURL
+curl -L https://github.com/urvil38/swatch-rs/releases/download/v0.0.1/swatch-rs-v0.0.1-x86_64-linux.tar.gz > swatch-rs-v0.0.1-x86_64-linux.tar.gz
+
+# untar archive
+tar -xvzf swatch-rs-v0.0.1-x86_64-linux.tar.gz
+cd swatch-rs
+
+# move it to bin dir (user need to has root privileges. run following command as root user using sudo.
+sudo mv ./swatch-rs /usr/local/bin
+```
+
 ## Build
 
 You can compile from source by [installing Cargo](https://crates.io/install)
