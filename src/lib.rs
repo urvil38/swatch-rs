@@ -55,7 +55,7 @@ fn clamp(v: i64, a: i64, b: i64) -> i64 {
 
 /// find biggest color range of given pixels.
 /// it's return RED, GREEN or BLUE if biggest range of pixels is red, green, blue respectively.  
-fn find_biggest_range(pixels: &Vec<Pixel>) -> Color {
+fn find_biggest_range(pixels: &[Pixel]) -> Color {
     let mut r_min = std::i64::MAX;
     let mut r_max = std::i64::MIN;
 
@@ -93,7 +93,7 @@ fn find_biggest_range(pixels: &Vec<Pixel>) -> Color {
 /// it's devide pixels into (2^max_depth) bucket and recursively apply median cut algorithm.
 /// https://en.wikipedia.org/wiki/Median_cut
 pub fn quantize(
-    pixels: &mut Vec<Pixel>,
+    pixels: &mut [Pixel],
     depth: usize,
     img_buf: &mut image::RgbImage,
 ) -> Vec<Pixel> {
@@ -110,9 +110,9 @@ pub fn quantize(
             pixel_median.g += p.g;
             pixel_median.b += p.b;
         }
-        pixel_median.r = pixel_median.r / pixels.len() as i64;
-        pixel_median.g = pixel_median.g / pixels.len() as i64;
-        pixel_median.b = pixel_median.b / pixels.len() as i64;
+        pixel_median.r /= pixels.len() as i64;
+        pixel_median.g /= pixels.len() as i64;
+        pixel_median.b /= pixels.len() as i64;
 
         for p in pixels.iter() {
             let px = image::Rgb([
@@ -141,8 +141,8 @@ pub fn quantize(
 
     let mid = (pixels.len() >> 1) as usize;
 
-    let mut left = quantize(&mut pixels[0..mid].to_vec(), depth - 1, img_buf);
-    let mut right = quantize(&mut pixels[mid..].to_vec(), depth - 1, img_buf);
+    let mut left = quantize(&mut pixels[0..mid], depth - 1, img_buf);
+    let mut right = quantize(&mut pixels[mid..], depth - 1, img_buf);
 
     let mut v = Vec::with_capacity(left.len() + right.len());
     v.append(&mut left);
@@ -153,7 +153,7 @@ pub fn quantize(
 
 /// order given pixel by their luminance in descending order. i.e most lighter to most
 /// darker color
-pub fn order_by_luminance(pixels: &mut Vec<Pixel>) {
+pub fn order_by_luminance(pixels: &mut [Pixel]) {
     pixels.sort_unstable_by(|p1, p2| {
         calc_luminance(*p1)
             .partial_cmp(&calc_luminance(*p2))
@@ -162,7 +162,7 @@ pub fn order_by_luminance(pixels: &mut Vec<Pixel>) {
 }
 
 /// find out most variant color from the given pixels.
-pub fn most_variant_color(pixels: &Vec<Pixel>) -> Pixel {
+pub fn most_variant_color(pixels: &[Pixel]) -> Pixel {
     let mut hi = 0;
     let mut max = std::i64::MIN;
 

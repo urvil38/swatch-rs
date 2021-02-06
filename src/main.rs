@@ -94,7 +94,7 @@ fn main() -> Result<(), io::Error> {
     Ok(())
 }
 
-fn write_to(output_type: DebugType, pixels: &Vec<Pixel>, filename: String) {
+fn write_to(output_type: DebugType, pixels: &[Pixel], filename: String) {
     match output_type {
         DebugType::HTML | DebugType::FILE => print_html(pixels, filename, output_type).unwrap(),
         DebugType::JSON => print_json(pixels).unwrap(),
@@ -102,7 +102,7 @@ fn write_to(output_type: DebugType, pixels: &Vec<Pixel>, filename: String) {
 }
 
 fn print_html(
-    pixels: &Vec<Pixel>,
+    pixels: &[Pixel],
     filename: String,
     output_type: DebugType,
 ) -> Result<(), io::Error> {
@@ -138,7 +138,7 @@ fn print_html(
     Ok(())
 }
 
-fn print_json(pixels: &Vec<Pixel>) -> Result<(), io::Error> {
+fn print_json(pixels: &[Pixel]) -> Result<(), io::Error> {
     let pixels_json = serde_json::to_string_pretty(pixels).unwrap();
     io::stdout().write_all(pixels_json.as_bytes())?;
 
