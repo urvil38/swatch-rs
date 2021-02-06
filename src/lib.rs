@@ -92,11 +92,7 @@ fn find_biggest_range(pixels: &[Pixel]) -> Color {
 /// quantize(reduce RGB color space to dominant N number of colors) given pixels using median cut algorithm.
 /// it's devide pixels into (2^max_depth) bucket and recursively apply median cut algorithm.
 /// https://en.wikipedia.org/wiki/Median_cut
-pub fn quantize(
-    pixels: &mut [Pixel],
-    depth: usize,
-    img_buf: &mut image::RgbImage,
-) -> Vec<Pixel> {
+pub fn quantize(pixels: &mut [Pixel], depth: usize, img_buf: &mut image::RgbImage) -> Vec<Pixel> {
     if depth == 0 {
         let mut pixel_median = Pixel {
             r: 0,

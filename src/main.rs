@@ -101,11 +101,7 @@ fn write_to(output_type: DebugType, pixels: &[Pixel], filename: String) {
     }
 }
 
-fn print_html(
-    pixels: &[Pixel],
-    filename: String,
-    output_type: DebugType,
-) -> Result<(), io::Error> {
+fn print_html(pixels: &[Pixel], filename: String, output_type: DebugType) -> Result<(), io::Error> {
     let html = r#"<html lang="en">
     <head>
         <meta charset="UTF-8">
