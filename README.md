@@ -5,7 +5,6 @@
 Quantize RGB color range of image to N dominant colors using [median cut](https://en.wikipedia.org/wiki/Median_cut) algorithm.
 
 ```
-swatch-rs -h
 swatch-rs 0.1.0
 utility to quantize image to N dominant color using median cut algorithm.
 
@@ -25,7 +24,7 @@ OPTIONS:
     -o, --output-image <output>      [default: quantize-image.png]
 ```
 
-# Download
+## Download
 
 - Download appropriate pre-compiled binary from the [release](https://github.com/urvil38/swatch-rs/releases) page.
 
@@ -43,7 +42,7 @@ sudo mv ./swatch-rs /usr/local/bin
 
 ## Build
 
-You can compile from source by [installing Cargo](https://crates.io/install)
+- You can compile from source by [installing Cargo](https://crates.io/install)
 ([Rust's](https://www.rust-lang.org/) package manager)
 and building `swatch-rs` using Cargo:
 
