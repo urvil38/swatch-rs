@@ -147,8 +147,8 @@ pub fn quantize(pixels: &mut [Pixel], depth: usize, img_buf: &mut image::RgbImag
     v
 }
 
-/// order given pixel by their luminance in descending order. i.e most lighter to most
-/// darker color
+/// order pixels by their luminance in ascending order. i.e most darker to most
+/// lighter color
 pub fn order_by_luminance(pixels: &mut [Pixel]) {
     pixels.sort_unstable_by(|p1, p2| {
         calc_luminance(*p1)
