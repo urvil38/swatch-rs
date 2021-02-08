@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/urvil38/swatch-rs/workflows/CI/badge.svg)
 
-Quantize RGB color range of image to N dominant colors using [median cut](https://en.wikipedia.org/wiki/Median_cut) algorithm.
+Quantize RGB color space of an image to N dominant colors using [median cut](https://en.wikipedia.org/wiki/Median_cut) algorithm.
 
 ```
 swatch-rs 0.1.0
@@ -36,7 +36,7 @@ curl -L https://github.com/urvil38/swatch-rs/releases/download/v0.0.1/swatch-rs-
 tar -xvzf swatch-rs-v0.0.1-x86_64-linux.tar.gz
 cd swatch-rs
 
-# move it to bin dir (user need to has root privileges. run following command as root user using sudo.
+# move it to bin dir (user need to have root privileges. run following command as root using sudo.
 sudo mv ./swatch-rs /usr/local/bin
 ```
 
