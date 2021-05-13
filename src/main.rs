@@ -5,7 +5,7 @@ use std::io::{self, Write};
 use std::path::Path;
 use structopt::StructOpt;
 mod lib;
-use lib::{order_by_luminance, quantize, Pixel};
+use lib::{most_variant_color, order_by_luminance, quantize, Pixel};
 
 use image::{GenericImageView, ImageBuffer, RgbImage};
 
@@ -49,6 +49,10 @@ struct Opt {
         default_value = "quantize-image.png"
     )]
     output: String,
+
+    /// Get most dominant color of an image.
+    #[structopt(short = "m", long = "most")]
+    most_dominant: bool,
 }
 
 fn main() -> Result<(), io::Error> {
@@ -80,15 +84,21 @@ fn main() -> Result<(), io::Error> {
         pixels.push(p);
     }
 
-    let mut pixels = quantize(&mut pixels, opt.max_depth as usize, &mut img_buf);
+    let mut quantized_pixels = quantize(&mut pixels, opt.max_depth as usize, &mut img_buf);
 
     img_buf.save(opt.output).unwrap();
 
-    order_by_luminance(&mut pixels);
+    order_by_luminance(&mut quantized_pixels);
+
+    if opt.most_dominant {
+        let p = most_variant_color(&quantized_pixels);
+        quantized_pixels.clear();
+        quantized_pixels.push(p);
+    }
 
     match opt.debug_type {
         None => (),
-        Some(d) => write_to(d, &pixels, filename.to_string()),
+        Some(d) => write_to(d, &quantized_pixels, filename.to_string()),
     }
 
     Ok(())
@@ -110,13 +120,23 @@ fn print_html(pixels: &[Pixel], filename: String, output_type: DebugType) -> Res
         <style>
             html, body { width: 100%; height: 100%; margin: 0; padding: 0}
             body { display: flex; flex-wrap: wrap;}
-            .color { width: 25%; height: 25%;}
+            .color { width: {{:WIDTH:}}%; height: {{:HEIGHT:}}%;}
         </style>
     </head>
     <body>"#;
 
-    let mut body = String::new();
-    body.push_str(&html.replace("{{:TITLE:}}", filename.as_ref()));
+    let s;
+    if pixels.len() > 1 {
+        s = 25;
+    } else {
+        s = 100;
+    }
+
+    let mut body = html
+        .replace("{{:TITLE:}}", &filename)
+        .replace("{{:WIDTH:}}", &s.to_string())
+        .replace("{{:HEIGHT:}}", &s.to_string());
+
     body.push('\n');
     for p in pixels {
         body.push_str(&format!(

@@ -43,10 +43,17 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        name: [linux, armv7, arm64, windows, macos]
+        name: [linux, linux-static, armv7, armv7-static, arm64, arm64-static, windows, macos]
         include:
           - name: linux
             os: ubuntu-latest
+
+          - name: linux-static
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            cargo_config: |
+              [target.x86_64-unknown-linux-musl]
+            build_flags: --target x86_64-unknown-linux-musl
 
           - name: armv7
             os: ubuntu-latest
@@ -58,6 +65,16 @@ jobs:
               linker = "arm-linux-gnueabihf-gcc"
             build_flags: --target armv7-unknown-linux-gnueabihf
 
+          - name: armv7-static
+            os: ubuntu-latest
+            target: armv7-unknown-linux-musleabihf
+            build_deps: >
+              gcc-arm-linux-gnueabihf
+            cargo_config: |
+              [target.armv7-unknown-linux-musleabihf]
+              linker = "arm-linux-gnueabihf-gcc"
+            build_flags: --target armv7-unknown-linux-musleabihf
+
           - name: arm64
             os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
@@ -67,6 +84,17 @@ jobs:
               [target.aarch64-unknown-linux-gnu]
               linker = "aarch64-linux-gnu-gcc"
             build_flags: --target aarch64-unknown-linux-gnu
+
+          - name: arm64-static
+            os: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            build_deps: >
+              gcc-aarch64-linux-gnu
+            cargo_config: |
+              [target.aarch64-unknown-linux-musl]
+              linker = "aarch64-linux-gnu-gcc"
+              rustflags = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
+            build_flags: --target aarch64-unknown-linux-musl
 
           - name: windows
             os: windows-latest
