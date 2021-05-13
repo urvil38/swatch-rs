@@ -30,10 +30,10 @@ OPTIONS:
 
 ```bash
 # download tar archive using cURL
-curl -L https://github.com/urvil38/swatch-rs/releases/download/v0.0.1/swatch-rs-v0.0.1-x86_64-linux.tar.gz > swatch-rs-v0.0.1-x86_64-linux.tar.gz
+curl -L https://github.com/urvil38/swatch-rs/releases/download/v0.0.2/swatch-rs-v0.0.2-x86_64-linux.tar.gz > swatch-rs-v0.0.2-x86_64-linux.tar.gz
 
 # untar archive
-tar -xvzf swatch-rs-v0.0.1-x86_64-linux.tar.gz
+tar -xvzf swatch-rs-v0.0.2-x86_64-linux.tar.gz
 cd swatch-rs
 
 # move it to bin dir (user need to have root privileges. run following command as root using sudo.
