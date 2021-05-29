@@ -5,23 +5,26 @@
 Quantize RGB color space of an image to N dominant colors using [median cut](https://en.wikipedia.org/wiki/Median_cut) algorithm.
 
 ```
-swatch-rs 0.1.0
+swatch-rs 1.0.0
 utility to quantize image to N dominant color using median cut algorithm.
 
 USAGE:
-    swatch-rs [OPTIONS] --image <image-path>
+    swatch-rs [FLAGS] [OPTIONS] --image <image-path>
 
 FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+    -h, --help            Prints help information
+    -m, --most            Get most dominant color of an image
+    -o, --output-image    weather output quantized image or not. if true, it will create a file called
+                          "${filename}-quantized.png"
+    -V, --version         Prints version information
 
 OPTIONS:
     -d, --debug-type <debug-type>    Debug type print quantized pixels to given format. value can be (html, json or
                                      file). "file" debug type will create a "swatch.html" and write HTML data into it
+                                     [default: json]
     -i, --image <image-path>         Path to an image
     -c, --colors <max-depth>         Number of colors needed in power of 2, ex: for 16 colors pass 4. (i.e. 2^4 = 16)
                                      [default: 4]
-    -o, --output-image <output>      [default: quantize-image.png]
 ```
 
 ## Download
@@ -30,10 +33,10 @@ OPTIONS:
 
 ```bash
 # download tar archive using cURL
-curl -L https://github.com/urvil38/swatch-rs/releases/download/v0.0.2/swatch-rs-v0.0.2-x86_64-linux.tar.gz > swatch-rs-v0.0.2-x86_64-linux.tar.gz
+curl -L https://github.com/urvil38/swatch-rs/releases/download/v1.0.0/swatch-rs-v1.0.0-x86_64-linux.tar.gz > swatch-rs-v1.0.0-x86_64-linux.tar.gz
 
 # untar archive
-tar -xvzf swatch-rs-v0.0.2-x86_64-linux.tar.gz
+tar -xvzf swatch-rs-v1.0.0-x86_64-linux.tar.gz
 cd swatch-rs
 
 # move it to bin dir (user need to have root privileges. run following command as root using sudo.
