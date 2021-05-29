@@ -13,14 +13,12 @@ use image::{GenericImageView, ImageBuffer, RgbImage};
 enum DebugType {
     JSON,
     HTML,
-    FILE,
 }
 
 fn parse_output_type(s: &str) -> Result<DebugType, String> {
     match s {
         "html" => Ok(DebugType::HTML),
         "json" => Ok(DebugType::JSON),
-        "file" => Ok(DebugType::FILE),
         _ => Err(format!("{}. value can be (html | json | file)", s)),
     }
 }
@@ -40,15 +38,12 @@ struct Opt {
     max_depth: u32,
 
     /// Debug type print quantized pixels to given format. value can be (html, json or file). "file" debug type will create a "swatch.html" and write HTML data into it.
-    #[structopt(short = "d", long = "debug-type", parse(try_from_str = parse_output_type), case_insensitive = true)]
-    debug_type: Option<DebugType>,
+    #[structopt(short = "d", long = "debug-type", parse(try_from_str = parse_output_type), case_insensitive = true, default_value = "json")]
+    debug_type: DebugType,
 
-    #[structopt(
-        short = "o",
-        long = "output-image",
-        default_value = "quantize-image.png"
-    )]
-    output: String,
+    /// weather output quantized image or not. if true, it will create a file called "${filename}-quantized.png"
+    #[structopt(short = "o", long = "output-image")]
+    output: bool,
 
     /// Get most dominant color of an image.
     #[structopt(short = "m", long = "most")]
@@ -59,6 +54,7 @@ fn main() -> Result<(), io::Error> {
     let opt = Opt::from_args();
 
     let image_path = Path::new(&opt.image_path);
+
     let img = image::open(image_path);
     let img = match img {
         Ok(img) => img,
@@ -67,7 +63,7 @@ fn main() -> Result<(), io::Error> {
             process::exit(1);
         }
     };
-    let filename = image_path.file_name().unwrap().to_str().unwrap();
+    let filename = image_path.file_stem().unwrap().to_str().unwrap();
     let pixel_count = img.pixels().count();
 
     let mut pixels: Vec<Pixel> = Vec::with_capacity(pixel_count);
@@ -86,7 +82,9 @@ fn main() -> Result<(), io::Error> {
 
     let mut quantized_pixels = quantize(&mut pixels, opt.max_depth as usize, &mut img_buf);
 
-    img_buf.save(opt.output).unwrap();
+    if opt.output {
+        img_buf.save(format!("{}-quantized.png", filename)).unwrap();
+    }
 
     order_by_luminance(&mut quantized_pixels);
 
@@ -96,22 +94,19 @@ fn main() -> Result<(), io::Error> {
         quantized_pixels.push(p);
     }
 
-    match opt.debug_type {
-        None => (),
-        Some(d) => write_to(d, &quantized_pixels, filename.to_string()),
-    }
+    write_to(opt.debug_type, &quantized_pixels, filename.to_string());
 
     Ok(())
 }
 
 fn write_to(output_type: DebugType, pixels: &[Pixel], filename: String) {
     match output_type {
-        DebugType::HTML | DebugType::FILE => print_html(pixels, filename, output_type).unwrap(),
+        DebugType::HTML => print_html(pixels, filename).unwrap(),
         DebugType::JSON => print_json(pixels).unwrap(),
     }
 }
 
-fn print_html(pixels: &[Pixel], filename: String, output_type: DebugType) -> Result<(), io::Error> {
+fn print_html(pixels: &[Pixel], filename: String) -> Result<(), io::Error> {
     let html = r#"<html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -145,11 +140,7 @@ fn print_html(pixels: &[Pixel], filename: String, output_type: DebugType) -> Res
         ))
     }
     body.push_str("</body>\n</html>");
-    match output_type {
-        DebugType::HTML => io::stdout().write_all(body.as_bytes())?,
-        DebugType::FILE => fs::write("swatch.html", body.as_bytes())?,
-        _ => (),
-    }
+    fs::write(format!("{}-swatch.html", filename), body.as_bytes())?;
 
     Ok(())
 }

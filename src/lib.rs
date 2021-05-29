@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::cmp;
 extern crate image;
 use serde::{Deserialize, Serialize};
@@ -78,14 +80,12 @@ fn find_biggest_range(pixels: &[Pixel]) -> Color {
     let g_range = g_max - g_min;
     let b_range = b_max - b_min;
 
-    let biggest_range = cmp::max(cmp::max(r_range, g_range), b_range);
+    let biggest_color_range = cmp::max(cmp::max(r_range, g_range), b_range);
 
-    if biggest_range == r_range {
-        Color::RED
-    } else if biggest_range == g_range {
-        Color::GREEN
-    } else {
-        Color::BLUE
+    match biggest_color_range {
+        biggest_range if r_range == biggest_range => Color::RED,
+        biggest_range if g_range == biggest_range => Color::GREEN,
+        _ => Color::BLUE,
     }
 }
 
@@ -121,18 +121,12 @@ pub fn quantize(pixels: &mut [Pixel], depth: usize, img_buf: &mut image::RgbImag
         return vec![pixel_median];
     };
 
-    let biggest_range = find_biggest_range(pixels);
+    let biggest_color_range = find_biggest_range(pixels);
 
-    match biggest_range {
-        Color::RED => {
-            pixels.sort_unstable_by(|p1, p2| p1.r.cmp(&p2.r));
-        }
-        Color::GREEN => {
-            pixels.sort_unstable_by(|p1, p2| p1.g.cmp(&p2.g));
-        }
-        Color::BLUE => {
-            pixels.sort_unstable_by(|p1, p2| p1.b.cmp(&p2.b));
-        }
+    match biggest_color_range {
+        Color::RED => pixels.sort_unstable_by(|p1, p2| p1.r.cmp(&p2.r)),
+        Color::GREEN => pixels.sort_unstable_by(|p1, p2| p1.g.cmp(&p2.g)),
+        Color::BLUE => pixels.sort_unstable_by(|p1, p2| p1.b.cmp(&p2.b)),
     };
 
     let mid = (pixels.len() >> 1) as usize;
