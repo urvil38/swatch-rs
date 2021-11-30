@@ -2,11 +2,11 @@
 
 ![CI](https://github.com/urvil38/swatch-rs/workflows/CI/badge.svg)
 
-Quantize RGB color space of an image to N dominant colors using [median cut](https://en.wikipedia.org/wiki/Median_cut) algorithm.
+Quantize RGB color space of an image to N dominant colors using a [median cut](https://en.wikipedia.org/wiki/Median_cut) algorithm.
 
 ```
 swatch-rs 1.0.0
-utility to quantize image to N dominant color using median cut algorithm.
+utility to quantize image to N dominant color using a median cut algorithm.
 
 USAGE:
     swatch-rs [FLAGS] [OPTIONS] --image <image-path>
@@ -14,7 +14,7 @@ USAGE:
 FLAGS:
     -h, --help            Prints help information
     -m, --most            Get most dominant color of an image
-    -o, --output-image    weather output quantized image or not. if true, it will create a file called
+    -o, --output-image    whether output quantized image or not. if true, it will create a file called
                           "${filename}-quantized.png"
     -V, --version         Prints version information
 
@@ -39,7 +39,7 @@ curl -L https://github.com/urvil38/swatch-rs/releases/download/v1.0.0/swatch-rs-
 tar -xvzf swatch-rs-v1.0.0-x86_64-linux.tar.gz
 cd swatch-rs
 
-# move it to bin dir (user need to have root privileges. run following command as root using sudo.
+# move it to bin dir (user need to have root privileges. Run the following command as root using sudo.
 sudo mv ./swatch-rs /usr/local/bin
 ```
 
@@ -65,7 +65,7 @@ binary will end up in `./target/release/swatch-rs`.
 ![iceland.jpg](./docs/iceland.jpg)
 
 
-- following command will produce quantized image and also swatch.html file which contains top N dominant colors(sorted by luminance).
+- The following command will produce a quantized image and swatch.html file, which contains top N dominant colors(sorted by luminance).
 
 ```bash
 swatch-rs -i ./docs/iceland.jpg -d file -c 8 -o quantize-image.jpg
