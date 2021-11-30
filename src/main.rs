@@ -19,14 +19,14 @@ fn parse_output_type(s: &str) -> Result<DebugType, String> {
     match s {
         "html" => Ok(DebugType::HTML),
         "json" => Ok(DebugType::JSON),
-        _ => Err(format!("{}. value can be (html | json | file)", s)),
+        _ => Err(format!("{}. value can be (html | json)", s)),
     }
 }
 
 #[derive(Debug, StructOpt)]
 #[structopt(
     name = "swatch-rs",
-    about = "utility to quantize image to N dominant color using median cut algorithm."
+    about = "utility to quantize image to N dominant color using a median cut algorithm."
 )]
 struct Opt {
     /// Path to an image
@@ -37,11 +37,11 @@ struct Opt {
     #[structopt(short = "c", long = "colors", default_value = "4")]
     max_depth: u32,
 
-    /// Debug type print quantized pixels to given format. value can be (html, json or file). "file" debug type will create a "swatch.html" and write HTML data into it.
+    /// Debug type print quantized pixels to given format. value can be (html or json). "html" debug type will create a "swatch-${file_name}.html" and write HTML data into it.
     #[structopt(short = "d", long = "debug-type", parse(try_from_str = parse_output_type), case_insensitive = true, default_value = "json")]
     debug_type: DebugType,
 
-    /// weather output quantized image or not. if true, it will create a file called "${filename}-quantized.png"
+    /// whether output quantized image or not. if true, it will create a file called "${filename}-quantized.png"
     #[structopt(short = "o", long = "output-image")]
     output: bool,
 
